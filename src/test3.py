@@ -5,6 +5,8 @@ import tkFileDialog
 import tkMessageBox
 import Image
 from tkMessageBox import *
+import pygame
+import ImageTk
 
 BACKGROUND_COLOR = "#335566"
 ACTIVE_BACKGROUND = "#667788"
@@ -56,7 +58,7 @@ rightframe.place(x = 600,y = 160)
 
 v1 = StringVar()
 v1.set("Input Image: None")
-w = Label(leftframe, textvariable = v1, justify = CENTER,font = ("helvetica",16),fg = "green", bg = BACKGROUND_COLOR)
+w = Label(leftframe, textvariable = v1, justify = CENTER,font = ("helvetica",10),fg = "green", bg = BACKGROUND_COLOR)
 w.pack(side = TOP)
 
 canvas = Canvas(leftframe, width="5i", height="5i",background="white",scrollregion=(0, 0, "10i", "10i"))                                
@@ -80,15 +82,15 @@ canvas.pack(expand = YES, fill = BOTH,side = LEFT)
 
 def open_file():
     file_name = tkFileDialog.askopenfilename(defaultextension = ".jpg",
-                                 filetypes = [('GIF','*.gif'),('JPEG','*.jpg'),('PNG','*.png')],
+                                 filetypes = [('GIF','*.gif'),('JPEG','*.jpg'),('PNG','*.png'),('TIFF','*.tiff'),('TIF','*.tif')],
                                  title = "open image")
     if file_name:
         root.current_image_file_name = file_name
         v1.set("Input Image: "+str(root.current_image_file_name))
         canvas.delete(ALL)
-        #im = Image.open(root.current_image_file_name)
-        #gif1 = PhotoImage(im)
-        gif1 = PhotoImage(file = root.current_image_file_name)
+        im = Image.open(root.current_image_file_name)
+        gif1 = ImageTk.PhotoImage(im)
+        #gif1 = PhotoImage(file = root.current_image_file_name)
         w = gif1.width()
         h = gif1.height()
         canvas.create_image(w/2, h/2, image = gif1)
