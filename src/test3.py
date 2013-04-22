@@ -6,7 +6,8 @@ import tkMessageBox
 from tkMessageBox import *
 
 BACKGROUND_COLOR = "#335566"
-ACTIVE_BACKGROUND = "#556677"
+ACTIVE_BACKGROUND = "#667788"
+HOVER_BACKGROUND = "#556677"
 root = Tk()
 SCREEN_WIDTH, SCREEN_HEIGHT = root.winfo_screenwidth(), root.winfo_screenheight()-60
 root.overrideredirect(1)
@@ -125,19 +126,19 @@ text.scrollY.pack(side=RIGHT, fill=Y)
 text.pack(expand = YES, fill = BOTH,side = LEFT)
 
 #Label(rightframe, textvariable=v, bg = "white",justify = LEFT,font = ("Rockwell",10)).pack(side = LEFT)
-
-var = IntVar()
-check = Checkbutton(root, text = "Append to existing text", variable = var,bg = BACKGROUND_COLOR,fg = "green",activebackground = ACTIVE_BACKGROUND)
+'''
+var = StringVar()
+check = Checkbutton(root, text = "Append to existing text", variable = var,onvalue = "yes",offvalue = "no",bg = BACKGROUND_COLOR,fg = "green",activebackground = ACTIVE_BACKGROUND)
 check.var = var
 check.pack()
 check.place(x = 600,y = 600) 
-
+'''
 def Button1():     
     if not root.current_image_file_name:
         tkMessageBox.showerror("Error","Please open an image file")
     else:
         im = Image.open(root.current_image_file_name)
-        print check.var
+        #print str(check.var)
         root.output_text = image_to_string(im)
         text.delete(1.0, END)
         text.insert(INSERT, root.output_text)
@@ -151,6 +152,8 @@ photo = PhotoImage(file="icons/convert_img2.gif")
 button1 = Button(f, image = photo, command = Button1,borderwidth = 0,bg = BACKGROUND_COLOR,activebackground = ACTIVE_BACKGROUND)  
 button1.photo = photo
 button1.pack(fill=BOTH, expand=1)
+button1.bind("<Enter>", lambda event, h=button1: h.configure(bg=HOVER_BACKGROUND))
+button1.bind("<Leave>", lambda event, h=button1: h.configure(bg=BACKGROUND_COLOR))
 f.place(x = SCREEN_WIDTH-475, y = 10)
 
 f1 = Frame(root, height=100, width=100)
@@ -161,6 +164,8 @@ photo = PhotoImage(file="icons/exit_img.gif")
 button2 = Button(f1, image = photo, command = quit_app,borderwidth = 0,bg = BACKGROUND_COLOR,activebackground = ACTIVE_BACKGROUND)  
 button2.photo = photo
 button2.pack(fill=BOTH, expand=1)
+button2.bind("<Enter>", lambda event, h=button2: h.configure(bg=HOVER_BACKGROUND))
+button2.bind("<Leave>", lambda event, h=button2: h.configure(bg=BACKGROUND_COLOR))
 f1.place(x = SCREEN_WIDTH-100, y = 10)
 
 f2 = Frame(root, height=100, width=100)
@@ -171,6 +176,8 @@ photo = PhotoImage(file="icons/save_img.gif")
 button3 = Button(f2, image = photo, command = save_file,borderwidth = 0,bg = BACKGROUND_COLOR,activebackground = ACTIVE_BACKGROUND)  
 button3.photo = photo
 button3.pack(fill=BOTH, expand=1)
+button3.bind("<Enter>", lambda event, h=button3: h.configure(bg=HOVER_BACKGROUND))
+button3.bind("<Leave>", lambda event, h=button3: h.configure(bg=BACKGROUND_COLOR))
 f2.place(x = SCREEN_WIDTH-225, y = 10)
 
 f3 = Frame(root, height=100, width=100)
@@ -181,6 +188,8 @@ photo = PhotoImage(file="icons/open_img.gif")
 button4 = Button(f3, image = photo, command = open_file,borderwidth = 0,bg = BACKGROUND_COLOR,activebackground = ACTIVE_BACKGROUND)  
 button4.photo = photo
 button4.pack(fill=BOTH, expand=1)
+button4.bind("<Enter>", lambda event, h=button4: h.configure(bg=HOVER_BACKGROUND))
+button4.bind("<Leave>", lambda event, h=button4: h.configure(bg=BACKGROUND_COLOR))
 f3.place(x = SCREEN_WIDTH-350, y = 10)
 
 #Label(root, text = "Output text", bg = "white",justify = LEFT).pack(anchor = S)
