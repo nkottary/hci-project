@@ -22,6 +22,12 @@ def play_convert_sound():
     sound1 = mixer.Sound(sound_file)
     sound1.play()
     
+def open_help():
+    tkMessageBox.showinfo("Help","This software converts images to text\n"\
+                          "open images by clicking on the open\n"\
+                          "icon. Click on the convert button, \n"\
+                          "now save your file by clicking on save.")
+    
 BACKGROUND_COLOR = "#335566"
 ACTIVE_BACKGROUND = "#667788"
 HOVER_BACKGROUND = "#556677"
@@ -57,7 +63,7 @@ root.title("Convertor")
 root.configure(bg = BACKGROUND_COLOR)
 root.tk_strictMotif(False)
 
-photox = PhotoImage(file="icons/logo.gif")
+photox = ImageTk.PhotoImage(Image.open("icons/logo.png"))
 w1x = Label(root, image=photox,borderwidth = 0, bg = BACKGROUND_COLOR)
 w1x.photo = photox
 w1x.pack()
@@ -81,13 +87,11 @@ canvas = Canvas(leftframe, width="5i", height="5i",background="white",scrollregi
 canvas.scrollX = Scrollbar(leftframe, orient=HORIZONTAL)
 canvas.scrollY = Scrollbar(leftframe, orient=VERTICAL)
 
-# now tie the three together. This is standard boilerplate text
 canvas['xscrollcommand'] = canvas.scrollX.set
 canvas['yscrollcommand'] = canvas.scrollY.set
 canvas.scrollX['command'] = canvas.xview
 canvas.scrollY['command'] = canvas.yview
 
-# pack 'em up
 canvas.scrollX.pack(side=BOTTOM, fill=X)
 canvas.scrollY.pack(side=RIGHT, fill=Y)
 canvas.pack_propagate(0)
@@ -127,6 +131,7 @@ def quit_app():
 menubar = Menu(root)
 menubar.add_command(label="Open", command=open_file)
 menubar.add_command(label="Save", command=save_file)
+menubar.add_command(label="Help", command=open_help)
 menubar.add_command(label="Close", command=quit_app)
 
 # display the menu
@@ -139,13 +144,11 @@ text = Text(rightframe,wrap = NONE)
 text.scrollX = Scrollbar(rightframe, orient=HORIZONTAL)
 text.scrollY = Scrollbar(rightframe, orient=VERTICAL)
 
-# now tie the three together. This is standard boilerplate text
 text['xscrollcommand'] = text.scrollX.set
 text['yscrollcommand'] = text.scrollY.set
 text.scrollX['command'] = text.xview
 text.scrollY['command'] = text.yview
 
-# pack 'em up
 text.scrollX.pack(side=BOTTOM, fill=X)
 text.scrollY.pack(side=RIGHT, fill=Y)
 text.pack_propagate(0)
@@ -165,7 +168,7 @@ check1.place(x = 600,y = 600)
 
 fontsize_label = Label(root, text = "Font size:", justify = CENTER,font = ("helvetica",16),fg = "green", bg = BACKGROUND_COLOR)
 fontsize_label.pack(side = TOP)
-fontsize_label.place(x = SCREEN_WIDTH-225,y = 600)
+fontsize_label.place(x = SCREEN_WIDTH-225,y = 160)
 framey = Frame(root,height = 100,width = 50)
 framey.pack_propagate(0)
 scrollbar = Scrollbar(framey, orient=VERTICAL)
@@ -178,7 +181,7 @@ def fontsize_change(abc):
 listbox.bind("<Double-Button-1>", fontsize_change)
 listbox.pack(side=LEFT, fill=BOTH, expand=1)
 framey.pack()
-framey.place(x = SCREEN_WIDTH-125,y = 600)
+framey.place(x = SCREEN_WIDTH-125,y = 160)
 
 
 for item in list_items:
@@ -207,7 +210,7 @@ f = Frame(root, height=100, width=100)
 f.pack_propagate(0) # don't shrink
 f.pack()
 
-photo = PhotoImage(file="icons/convert_img2.gif")
+photo = ImageTk.PhotoImage(Image.open("icons/convert_img2.png"))
 button1 = Button(f, image = photo, command = Button1,borderwidth = 0,bg = BACKGROUND_COLOR,activebackground = ACTIVE_BACKGROUND)  
 button1.photo = photo
 button1.pack(fill=BOTH, expand=1)
@@ -219,7 +222,7 @@ f1 = Frame(root, height=100, width=100)
 f1.pack_propagate(0) # don't shrink
 f1.pack()
 
-photo = PhotoImage(file="icons/exit_img.gif")
+photo = ImageTk.PhotoImage(Image.open("icons/exit_img.png"))
 button2 = Button(f1, image = photo, command = quit_app,borderwidth = 0,bg = BACKGROUND_COLOR,activebackground = ACTIVE_BACKGROUND)  
 button2.photo = photo
 button2.pack(fill=BOTH, expand=1)
@@ -231,7 +234,7 @@ f2 = Frame(root, height=100, width=100)
 f2.pack_propagate(0) # don't shrink
 f2.pack()
 
-photo = PhotoImage(file="icons/save_img.gif")
+photo = ImageTk.PhotoImage(Image.open("icons/save_img.png"))
 button3 = Button(f2, image = photo, command = save_file,borderwidth = 0,bg = BACKGROUND_COLOR,activebackground = ACTIVE_BACKGROUND)  
 button3.photo = photo
 button3.pack(fill=BOTH, expand=1)
@@ -243,13 +246,27 @@ f3 = Frame(root, height=100, width=100)
 f3.pack_propagate(0) # don't shrink
 f3.pack()
 
-photo = PhotoImage(file="icons/open_img.gif")
+photo = ImageTk.PhotoImage(Image.open("icons/open_img.png"))
 button4 = Button(f3, image = photo, command = open_file,borderwidth = 0,bg = BACKGROUND_COLOR,activebackground = ACTIVE_BACKGROUND)  
 button4.photo = photo
 button4.pack(fill=BOTH, expand=1)
 button4.bind("<Enter>", lambda event, h=button4: h.configure(bg=HOVER_BACKGROUND))
 button4.bind("<Leave>", lambda event, h=button4: h.configure(bg=BACKGROUND_COLOR))
 f3.place(x = SCREEN_WIDTH-350, y = 10)
+
+f4 = Frame(root, height=100, width=100)
+f4.pack_propagate(0) # don't shrink
+f4.pack()
+
+
+
+photo = ImageTk.PhotoImage(Image.open("icons/help_img.png"))
+button5 = Button(f4, image = photo, command = open_help,borderwidth = 0,bg = BACKGROUND_COLOR,activebackground = ACTIVE_BACKGROUND)  
+button5.photo = photo
+button5.pack(fill=BOTH, expand=1)
+button5.bind("<Enter>", lambda event, h=button5: h.configure(bg=HOVER_BACKGROUND))
+button5.bind("<Leave>", lambda event, h=button5: h.configure(bg=BACKGROUND_COLOR))
+f4.place(x = SCREEN_WIDTH-100, y = SCREEN_HEIGHT-100)
 
 #Label(root, text = "Output text", bg = "white",justify = LEFT).pack(anchor = S)
 
