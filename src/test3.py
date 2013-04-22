@@ -3,6 +3,7 @@ from pytesser import *
 import os
 import tkFileDialog
 import tkMessageBox
+import Image
 from tkMessageBox import *
 
 BACKGROUND_COLOR = "#335566"
@@ -44,9 +45,11 @@ w1x.photo = photox
 w1x.pack()
 w1x.place(x = 10,y = 10)
 
-leftframe = Frame(root, bg = BACKGROUND_COLOR)
+leftframe = Frame(root, bg = BACKGROUND_COLOR,width = 500,height = 500)
+leftframe.pack_propagate(0)
 leftframe.pack()
-rightframe = Frame(root, bg = BACKGROUND_COLOR)
+rightframe = Frame(root, bg = BACKGROUND_COLOR,width = 500,height = 500)
+rightframe.pack_propagate(0)
 rightframe.pack()
 leftframe.place(x = 10,y = 160)
 rightframe.place(x = 600,y = 160)
@@ -69,6 +72,7 @@ canvas.scrollY['command'] = canvas.yview
 # pack 'em up
 canvas.scrollX.pack(side=BOTTOM, fill=X)
 canvas.scrollY.pack(side=RIGHT, fill=Y)
+canvas.pack_propagate(0)
 canvas.pack(expand = YES, fill = BOTH,side = LEFT)
 
 #gif1 = PhotoImage(file = current_image_file_name)
@@ -76,12 +80,14 @@ canvas.pack(expand = YES, fill = BOTH,side = LEFT)
 
 def open_file():
     file_name = tkFileDialog.askopenfilename(defaultextension = ".jpg",
-                                 filetypes = [('GIF','*.gif')],
+                                 filetypes = [('GIF','*.gif'),('JPEG','*.jpg'),('PNG','*.png')],
                                  title = "open image")
     if file_name:
         root.current_image_file_name = file_name
         v1.set("Input Image: "+str(root.current_image_file_name))
         canvas.delete(ALL)
+        #im = Image.open(root.current_image_file_name)
+        #gif1 = PhotoImage(im)
         gif1 = PhotoImage(file = root.current_image_file_name)
         w = gif1.width()
         h = gif1.height()
@@ -123,22 +129,54 @@ text.scrollY['command'] = text.yview
 # pack 'em up
 text.scrollX.pack(side=BOTTOM, fill=X)
 text.scrollY.pack(side=RIGHT, fill=Y)
+text.pack_propagate(0)
+text.config(font = ('helvetica',10))
 text.pack(expand = YES, fill = BOTH,side = LEFT)
 
 #Label(rightframe, textvariable=v, bg = "white",justify = LEFT,font = ("Rockwell",10)).pack(side = LEFT)
 '''
-var = StringVar()
-check = Checkbutton(root, text = "Append to existing text", variable = var,onvalue = "yes",offvalue = "no",bg = BACKGROUND_COLOR,fg = "green",activebackground = ACTIVE_BACKGROUND)
-check.var = var
-check.pack()
-check.place(x = 600,y = 600) 
+var1 = IntVar()
+check1 = Checkbutton(root, text = "Append to existing text", variable = var1,onvalue = 1,offvalue = 0,bg = BACKGROUND_COLOR,fg = "green",activebackground = ACTIVE_BACKGROUND)
+check1.var1 = var1
+check1.pack()
+check1.place(x = 600,y = 600) 
 '''
+
+
+
+fontsize_label = Label(root, text = "Font size:", justify = CENTER,font = ("helvetica",16),fg = "green", bg = BACKGROUND_COLOR)
+fontsize_label.pack(side = TOP)
+fontsize_label.place(x = SCREEN_WIDTH-225,y = 600)
+framey = Frame(root,height = 100,width = 50)
+framey.pack_propagate(0)
+scrollbar = Scrollbar(framey, orient=VERTICAL)
+listbox = Listbox(framey, yscrollcommand=scrollbar.set)
+scrollbar.config(command=listbox.yview)
+scrollbar.pack(side=RIGHT, fill=Y)
+list_items = ["8","9","10","11","12","14","16","18","20","22","24","26","28","36","48","72"]
+def fontsize_change(abc):
+    text.config(font = ('helvetica',int(list_items[int(listbox.curselection()[0])])))
+listbox.bind("<Double-Button-1>", fontsize_change)
+listbox.pack(side=LEFT, fill=BOTH, expand=1)
+framey.pack()
+framey.place(x = SCREEN_WIDTH-125,y = 600)
+
+
+for item in list_items:
+    listbox.insert(END, item)
+    
 def Button1():     
     if not root.current_image_file_name:
         tkMessageBox.showerror("Error","Please open an image file")
     else:
         im = Image.open(root.current_image_file_name)
-        #print str(check.var)
+        '''
+        print check1.var1
+        if check1.var1 == 1:
+            print "haha"
+        elif check1.var1 == 0:
+            print "hehe"
+        '''
         root.output_text = image_to_string(im)
         text.delete(1.0, END)
         text.insert(INSERT, root.output_text)
