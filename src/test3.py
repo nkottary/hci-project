@@ -7,11 +7,26 @@ import Image
 from tkMessageBox import *
 import pygame
 import ImageTk
+#import tkSnack
+from pygame import mixer
 
+mixer.init(44100)
+
+def play_error_sound():
+    sound_file = "sounds/error.wav"
+    sound1 = mixer.Sound(sound_file)
+    sound1.play()
+    
+def play_convert_sound():
+    sound_file = "sounds/convert.wav"
+    sound1 = mixer.Sound(sound_file)
+    sound1.play()
+    
 BACKGROUND_COLOR = "#335566"
 ACTIVE_BACKGROUND = "#667788"
 HOVER_BACKGROUND = "#556677"
 root = Tk()
+#tkSnack.initializeSnack(root)
 SCREEN_WIDTH, SCREEN_HEIGHT = root.winfo_screenwidth(), root.winfo_screenheight()-60
 root.overrideredirect(1)
 root.geometry("%dx%d+0+0" % (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -34,6 +49,7 @@ def save_file():
             f.close()
             root.saved = True
     else:
+        play_error_sound()
         tkMessageBox.showerror("Error","You have not converted any file! , nothing to save.")
 
 #root of the window 
@@ -82,7 +98,7 @@ canvas.pack(expand = YES, fill = BOTH,side = LEFT)
 
 def open_file():
     file_name = tkFileDialog.askopenfilename(defaultextension = ".jpg",
-                                 filetypes = [('GIF','*.gif'),('JPEG','*.jpg'),('PNG','*.png'),('TIFF','*.tiff'),('TIF','*.tif')],
+                                 filetypes = [('GIF','*.gif'),('JPEG','*.jpg'),('PNG','*.png'),('TIF','*.tiff *.tif'),('TGA','*.tga'),('BMP','*.bmp')],
                                  title = "open image")
     if file_name:
         root.current_image_file_name = file_name
@@ -99,6 +115,7 @@ def open_file():
 def quit_app():
     
     if root.output_text and not root.saved:
+        play_error_sound()
         reply = tkMessageBox.askquestion("File not saved","You have not saved the file, do you want to save it now?", type = YESNOCANCEL)
         if reply == "yes":
             save_file()
@@ -169,8 +186,10 @@ for item in list_items:
     
 def Button1():     
     if not root.current_image_file_name:
+        play_error_sound()
         tkMessageBox.showerror("Error","Please open an image file")
     else:
+        play_convert_sound()
         im = Image.open(root.current_image_file_name)
         '''
         print check1.var1
